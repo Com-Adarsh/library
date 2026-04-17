@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ghost-white text-slate-navy font-inter;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-poppins font-bold;
+}
+
+h1 {
+  @apply text-h1;
+}
+
+h2 {
+  @apply text-h2;
+}
+
+h3 {
+  @apply text-h3;
+}
+
+a {
+  @apply text-sky-blue font-medium hover:underline transition-all;
+}
+
+button {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.card {
+  @apply bg-white border border-light-gray rounded-lg shadow-card p-6;
+}
+
+.card:hover {
+  @apply shadow-lg;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

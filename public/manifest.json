@@ -1,0 +1,89 @@
+{
+  "name": "The IMSC Commons - Digital Library",
+  "short_name": "IMSC Commons",
+  "description": "Empowering Academic Excellence through Collaboration. A student-led digital library at CUSAT.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#BC0000",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-1.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Upload Resources",
+      "short_name": "Upload",
+      "description": "Upload question papers and textbooks",
+      "url": "/upload",
+      "icons": [
+        {
+          "src": "/icon-upload.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Browse Library",
+      "short_name": "Browse",
+      "description": "Browse subjects and semesters",
+      "url": "/subject/physics?type=question_paper",
+      "icons": [
+        {
+          "src": "/icon-browse.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Join Discussions",
+      "short_name": "Discuss",
+      "description": "Participate in academic discussions",
+      "url": "/discussions",
+      "icons": [
+        {
+          "src": "/icon-discuss.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
