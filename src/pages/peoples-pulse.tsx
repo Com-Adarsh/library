@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Zap, Filter, Calendar, ExternalLink } from 'lucide-react';
+import { Zap, Filter, Calendar, ExternalLink, Globe, MapPin } from 'lucide-react';
 import Navigation from '../components/Navigation';
 import SocialHub from '../components/SocialHub';
 import Footer from '../components/Footer';
@@ -13,6 +13,7 @@ interface NewsArticle {
   publishedAt: string;
   category: string;
   image?: string;
+  liveMinutesAgo?: number;
 }
 
 const CATEGORIES = [
@@ -93,8 +94,9 @@ export default function PeoplesPulse() {
   const [loading, setLoading] = useState(false);
   const [timeAgo, setTimeAgo] = useState<{ [key: string]: string }>({});
   const [apiReady, setApiReady] = useState(false);
+  const [newsScope, setNewsScope] = useState<'local' | 'global'>('local'); // Local/Global toggle
 
-  // Fetch from NewsAPI on component mount
+  // Fetch from NewsAPI on component mount and when newsScope changes
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -102,43 +104,60 @@ export default function PeoplesPulse() {
         const keywords = ['science', 'sociology', 'public education', 'social justice', 'labour rights'];
         const query = keywords.join(' OR ');
         
-        const response = await fetch(`/api/news?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en`);
+        // Add cache-busting timestamp
+        const timestamp = new Date().getTime();
+        const response = await fetch(
+          `/api/news?q=${encodeURIComponent(query)}&local=${newsScope === 'local' ? 'true' : 'false'}&t=${timestamp}`,
+          {
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+            }
+          }
+        );
         const data = await response.json();
         
         if (data.articles && data.articles.length > 0) {
           // Filter for recent articles (Jan 2026 onwards)
           const filteredArticles = data.articles
             .filter((article: any) => new Date(article.publishedAt) >= new Date('2026-01-01'))
-            .map((article: any, idx: number) => ({
-              id: `api-${idx}`,
-              title: article.title,
-              description: article.description,
-              source: article.source.name,
-              url: article.url,
-              category: 'solidarity',
-              publishedAt: article.publishedAt,
-              image: article.urlToImage,
-            }));
+            .map((article: any, idx: number) => {
+              const minutesAgo = Math.floor((new Date().getTime() - new Date(article.publishedAt).getTime()) / (1000 * 60));
+              return {
+                id: `api-${idx}`,
+                title: article.title,
+                description: article.description,
+                source: article.source,
+                url: article.url,
+                category: 'solidarity',
+                publishedAt: article.publishedAt,
+                image: article.urlToImage,
+                liveMinutesAgo: minutesAgo
+              };
+            });
           
           if (filteredArticles.length > 0) {
             setArticles(filteredArticles.slice(0, 12)); // Limit to 12
             setApiReady(true);
           } else {
             setArticles(MOCK_ARTICLES);
+            setApiReady(false);
           }
         } else {
           setArticles(MOCK_ARTICLES);
+          setApiReady(false);
         }
       } catch (error) {
         console.log('API not available, using mock data');
         setArticles(MOCK_ARTICLES);
+        setApiReady(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchNews();
-  }, []);
+  }, [newsScope]);
 
   // Load articles based on category
   useEffect(() => {
@@ -232,6 +251,42 @@ export default function PeoplesPulse() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Local/Global Toggle */}
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {newsScope === 'local' ? (
+              <MapPin className="w-5 h-5 text-crimson" />
+            ) : (
+              <Globe className="w-5 h-5 text-blue-600" />
+            )}
+            <h3 className="font-bold text-slate-navy">News Source</h3>
+          </div>
+          <div className="flex items-center gap-2 bg-slate-200 p-1 rounded-lg">
+            <button
+              onClick={() => setNewsScope('local')}
+              className={`px-4 py-2 rounded-md font-medium transition-all ${
+                newsScope === 'local'
+                  ? 'bg-crimson text-white shadow-md'
+                  : 'bg-transparent text-slate-navy hover:bg-slate-300'
+              }`}
+            >
+              <MapPin size={16} className="inline mr-2" />
+              Local (India)
+            </button>
+            <button
+              onClick={() => setNewsScope('global')}
+              className={`px-4 py-2 rounded-md font-medium transition-all ${
+                newsScope === 'global'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-transparent text-slate-navy hover:bg-slate-300'
+              }`}
+            >
+              <Globe size={16} className="inline mr-2" />
+              Global
+            </button>
+          </div>
+        </div>
+
         {/* Category Filters */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
@@ -305,18 +360,32 @@ export default function PeoplesPulse() {
                       {article.description}
                     </p>
 
-                    {/* Footer */}
-                    <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-200 pt-3">
-                      <div>
-                        <p className="font-medium text-slate-600">{article.source}</p>
-                        <p className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {timeAgo[article.id]}
-                        </p>
+                    {/* Footer with Live Badge */}
+                    <div className="border-t border-slate-200 pt-3">
+                      {/* Live Status Badge */}
+                      <div className="mb-3 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald/10 to-emerald/5 rounded-lg border border-emerald/30">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald"></span>
+                        </span>
+                        <span className="text-xs font-bold text-emerald-700">
+                          Live from {article.source} • {article.liveMinutesAgo && article.liveMinutesAgo < 60 ? `${article.liveMinutesAgo}m ago` : timeAgo[article.id]}
+                        </span>
                       </div>
-                      <button className="p-2 hover:bg-crimson/10 rounded-lg transition-colors">
-                        <ExternalLink className="w-4 h-4 text-crimson" />
-                      </button>
+
+                      {/* Footer */}
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs text-slate-600">
+                          <p className="font-medium">{article.source}</p>
+                          <p className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {timeAgo[article.id]}
+                          </p>
+                        </div>
+                        <a href={article.url} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-crimson/10 rounded-lg transition-colors">
+                          <ExternalLink className="w-4 h-4 text-crimson" />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>

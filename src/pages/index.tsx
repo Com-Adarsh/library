@@ -233,18 +233,58 @@ export default function Home() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {SUBJECTS.map((subject) => {
-                // Map string icon names to actual components
-                const iconMap: { [key: string]: React.ReactNode } = {
-                  'Atom': <Atom size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'TestTube2': <TestTube2 size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'Divide': <Divide size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'Dna': <Dna size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'BarChart3': <BarChart3 size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'Leaf': <Leaf size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'Globe': <Globe size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'Sun': <Sun size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
-                  'BookOpen': <BookOpen size={48} className="text-crimson mx-auto" strokeWidth={1.5} />,
+                // Map string icon names to actual components with specific animations
+                const getIconWithAnimation = (iconName: string) => {
+                  const baseClasses = "mx-auto transition-all duration-300";
+                  
+                  const iconMap: { [key: string]: { component: React.ReactNode; animation: string } } = {
+                    'Atom': { 
+                      component: <Atom size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:animate-spin'
+                    },
+                    'TestTube2': { 
+                      component: <TestTube2 size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:scale-125'
+                    },
+                    'Divide': { 
+                      component: <Divide size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:rotate-180'
+                    },
+                    'Dna': { 
+                      component: <Dna size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:scale-110'
+                    },
+                    'BarChart3': { 
+                      component: <BarChart3 size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:animate-pulse'
+                    },
+                    'Leaf': { 
+                      component: <Leaf size={48} className={`text-emerald-600 ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:scale-110'
+                    },
+                    'Globe': { 
+                      component: <Globe size={48} className={`text-blue-600 ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:animate-spin'
+                    },
+                    'Sun': { 
+                      component: <Sun size={48} className={`text-amber-500 ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:animate-pulse'
+                    },
+                    'BookOpen': { 
+                      component: <BookOpen size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                      animation: 'group-hover:scale-110'
+                    },
+                  };
+
+                  const iconData = iconMap[iconName] || { 
+                    component: <BookOpen size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
+                    animation: 'group-hover:scale-110'
+                  };
+                  
+                  return iconData;
                 };
+
+                const { component: icon, animation } = getIconWithAnimation(subject.icon);
 
                 return (
                   <Link
@@ -252,9 +292,9 @@ export default function Home() {
                     href={`/subject/${subject.name.replace(/\s+/g, '-').toLowerCase()}?type=question_paper`}
                   >
                     <div className="card hover:shadow-xl hover:border-crimson hover:scale-105 transition-all duration-300 cursor-pointer group text-center p-6 bg-white border border-slate-200">
-                      {/* Icon */}
-                      <div className="mb-4 group-hover:scale-110 transition-transform">
-                        {iconMap[subject.icon] || <BookOpen size={48} className="text-crimson mx-auto" strokeWidth={1.5} />}
+                      {/* Animated Icon Container */}
+                      <div className={`mb-4 flex items-center justify-center h-20 ${animation}`}>
+                        {icon}
                       </div>
 
                       {/* Subject Name */}
