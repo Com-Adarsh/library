@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Upload, ChevronDown, Clock, Zap, Calculator } from 'lucide-react';
+import { Menu, X, Upload, ChevronDown, Clock, Calculator } from 'lucide-react';
 import { SUBJECTS } from '@/lib/constants';
 
 export default function Navigation() {
@@ -115,12 +115,6 @@ export default function Navigation() {
               Top Contributors
             </Link>
 
-            {/* People's Pulse */}
-            <Link href="/peoples-pulse" className="flex items-center gap-1 text-slate-navy font-medium hover:text-crimson transition hover:no-underline py-2">
-              <Zap size={18} />
-              People's Pulse
-            </Link>
-
             {/* Tools Dropdown */}
             <Link href="/tools" className="flex items-center gap-1 text-slate-navy font-medium hover:text-crimson transition hover:no-underline py-2">
               <Calculator size={18} />
@@ -222,13 +216,6 @@ export default function Navigation() {
               onClick={() => setIsOpen(false)}
             >
               Top Contributors
-            </Link>
-            <Link
-              href="/peoples-pulse"
-              className="block px-0 py-2 text-slate-navy hover:text-crimson transition hover:no-underline font-medium flex items-center gap-2"
-              onClick={() => setIsOpen(false)}
-            >
-              <Zap size={18} /> People's Pulse
             </Link>
             <Link
               href="/tools"

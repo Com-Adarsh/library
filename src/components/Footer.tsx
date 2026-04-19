@@ -120,7 +120,6 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><a href="/" className="text-slate-600 hover:text-crimson transition">Home</a></li>
               <li><a href="/discussions" className="text-slate-600 hover:text-crimson transition">Discussions</a></li>
-              <li><a href="/peoples-pulse" className="text-slate-600 hover:text-crimson transition">People's Pulse</a></li>
               <li><a href="/tools" className="text-slate-600 hover:text-crimson transition">Study Tools</a></li>
             </ul>
           </div>
