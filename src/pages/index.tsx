@@ -29,37 +29,45 @@ export default function Home() {
       <Navigation />
 
       <main className="min-h-screen">
-        {/* Enhanced Hero Section with Glassmorphism */}
-        <section className="pt-20 pb-20 bg-cover bg-center text-white relative overflow-hidden"
+        {/* Enhanced Hero Section with Building Image */}
+        <section className="pt-20 pb-20 bg-cover bg-center text-white relative overflow-hidden h-screen flex items-center justify-center"
                  style={{
-                   backgroundImage: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(188, 0, 0, 0.2)), url(\'https://images.unsplash.com/photo-1580828343064-fde4fc206bc6?w=1920&h=1080&fit=crop\')',
+                   backgroundImage: 'linear-gradient(135deg, rgba(30, 41, 59, 0.65), rgba(188, 0, 0, 0.25)), url(\'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&h=1080&fit=crop\')',
                    backgroundSize: 'cover',
-                   backgroundPosition: 'center'
+                   backgroundPosition: 'center',
+                   backgroundAttachment: 'fixed'
                  }}>
           
           {/* Glassmorphism Overlay */}
           <div className="absolute inset-0 bg-white/5 backdrop-blur-sm"></div>
 
-          {/* Background Pattern - Democratic aesthetic */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-crimson rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-crimson rounded-full blur-3xl"></div>
-          </div>
+          {/* Gradient Overlay - More dramatic */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-navy/60 via-slate-navy/40 to-transparent"></div>
+
+          {/* Dark vignette for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30"></div>
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center max-w-4xl mx-auto">
+              {/* Welcome Badge */}
+              <div className="mb-6 inline-block">
+                <span className="bg-crimson/90 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-md">
+                  🎓 Welcome to The IMSC Commons
+                </span>
+              </div>
+
               {/* Main Heading */}
-              <h1 className="text-h1 mb-4 font-poppins font-bold drop-shadow-lg">
+              <h1 className="text-h1 mb-4 font-poppins font-bold drop-shadow-lg text-white" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
                 Knowledge is a Public Right
               </h1>
 
               {/* Subheading */}
-              <p className="text-2xl font-light mb-2 opacity-98 drop-shadow-md">
+              <p className="text-2xl font-light mb-2 opacity-98 drop-shadow-md text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
                 Access textbooks, papers, and scientific progress for the IMSC community
               </p>
 
               {/* Democratic message */}
-              <p className="text-lg opacity-90 mb-12 font-inter drop-shadow-md">
+              <p className="text-lg opacity-95 mb-12 font-inter drop-shadow-md text-white" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
                 A secular, student-governed digital repository at CUSAT. Managed by SFI IMSC Sub-Committee.
               </p>
 
