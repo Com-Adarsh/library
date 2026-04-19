@@ -10,46 +10,8 @@ interface RecentUpload {
   subject: string;
 }
 
-const MOCK_RECENT_UPLOADS: RecentUpload[] = [
-  {
-    id: '1',
-    title: 'Physics Numerical Solutions - Chapter 5',
-    contributor: 'Aisha Sharma',
-    timestamp: '10 mins ago',
-    subject: 'Physics'
-  },
-  {
-    id: '2',
-    title: 'Chemistry Quantum Mechanics Notes',
-    contributor: 'Rohan Patel',
-    timestamp: '45 mins ago',
-    subject: 'Chemistry'
-  },
-  {
-    id: '3',
-    title: 'Mathematics Calculus Practice Problems',
-    contributor: 'Maya Krishnan',
-    timestamp: '2 hours ago',
-    subject: 'Mathematics'
-  },
-  {
-    id: '4',
-    title: 'Biology Biochemistry Summary',
-    contributor: 'Dev Gupta',
-    timestamp: '3 hours ago',
-    subject: 'Biology'
-  },
-  {
-    id: '5',
-    title: 'Photonics Laser Technology Guide',
-    contributor: 'Priya Menon',
-    timestamp: '5 hours ago',
-    subject: 'Photonics'
-  },
-];
-
 export default function Footer() {
-  const [recentUploads] = useState<RecentUpload[]>(MOCK_RECENT_UPLOADS);
+  const [recentUploads] = useState<RecentUpload[]>([]);
 
   return (
     <footer className="bg-gradient-to-b from-slate-50 to-slate-100 border-t border-slate-200">
@@ -64,38 +26,45 @@ export default function Footer() {
 
           {/* Recent Uploads Grid */}
           <div className="grid gap-4">
-            {recentUploads.map((upload) => (
-              <div
-                key={upload.id}
-                className="bg-white rounded-lg p-4 border border-slate-200 hover:border-crimson hover:shadow-md transition-all duration-300 flex items-start justify-between group"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-1">
-                      <h4 className="font-bold text-slate-navy group-hover:text-crimson transition-colors truncate">
-                        {upload.title}
-                      </h4>
-                      <div className="flex flex-wrap items-center gap-3 mt-1">
-                        <span className="text-xs bg-emerald/10 text-emerald px-2 py-1 rounded font-medium">
-                          {upload.subject}
-                        </span>
-                        <span className="text-xs text-slate-500">
-                          by <span className="font-semibold text-slate-600">{upload.contributor}</span>
-                        </span>
-                        <span className="text-xs text-slate-400 ml-auto">
-                          {upload.timestamp}
-                        </span>
+            {recentUploads.length === 0 ? (
+              <div className="bg-white rounded-lg p-8 border border-slate-200 text-center">
+                <p className="text-slate-500 text-sm mb-2">No uploads yet</p>
+                <p className="text-slate-400 text-xs">New contributions will appear here in real-time</p>
+              </div>
+            ) : (
+              recentUploads.map((upload) => (
+                <div
+                  key={upload.id}
+                  className="bg-white rounded-lg p-4 border border-slate-200 hover:border-crimson hover:shadow-md transition-all duration-300 flex items-start justify-between group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1">
+                        <h4 className="font-bold text-slate-navy group-hover:text-crimson transition-colors truncate">
+                          {upload.title}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-3 mt-1">
+                          <span className="text-xs bg-emerald/10 text-emerald px-2 py-1 rounded font-medium">
+                            {upload.subject}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            by <span className="font-semibold text-slate-600">{upload.contributor}</span>
+                          </span>
+                          <span className="text-xs text-slate-400 ml-auto">
+                            {upload.timestamp}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <div className="ml-4 flex-shrink-0">
+                    <button className="p-2 hover:bg-crimson/10 rounded transition-colors text-slate-400 group-hover:text-crimson">
+                      <ArrowUpRight size={18} />
+                    </button>
+                  </div>
                 </div>
-                <div className="ml-4 flex-shrink-0">
-                  <button className="p-2 hover:bg-crimson/10 rounded transition-colors text-slate-400 group-hover:text-crimson">
-                    <ArrowUpRight size={18} />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* View All Link */}
