@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { Upload as UploadIcon, X } from 'lucide-react';
 import { SUBJECTS, SEMESTERS, CATEGORIES } from '@/lib/constants';
+import { uploadPendingFile } from '@/lib/storage-service';
 
 export default function Upload() {
   const [formData, setFormData] = useState({
     title: '',
+    uploaderName: '',
+    uploaderEmail: '',
     subject: '',
     semester: '',
     category: '',
@@ -15,6 +18,8 @@ export default function Upload() {
 
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [statusType, setStatusType] = useState<'info' | 'success' | 'error'>('info');
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -58,27 +63,81 @@ export default function Upload() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.subject || !formData.semester || !formData.category || !formData.file) {
-      alert('Please fill in all required fields');
+    if (
+      !formData.title ||
+      !formData.uploaderName ||
+      !formData.uploaderEmail ||
+      !formData.subject ||
+      !formData.semester ||
+      !formData.category ||
+      !formData.file
+    ) {
+      setStatusType('error');
+      setStatusMessage('Please fill in all required fields before uploading.');
       return;
     }
 
-    // Simulate upload progress
-    for (let i = 0; i <= 100; i += 10) {
-      setUploadProgress(i);
-      await new Promise((resolve) => setTimeout(resolve, 200));
-    }
+    setStatusType('info');
+    setStatusMessage('Sending your file to the review queue...');
 
-    alert('File uploaded successfully! It will be reviewed by moderators.');
-    setFormData({
-      title: '',
-      subject: '',
-      semester: '',
-      category: '',
-      description: '',
-      file: null,
-    });
-    setUploadProgress(0);
+    const uploadPath = `pending/${Date.now()}_${formData.file.name.replace(/\s+/g, '_')}`;
+
+    try {
+      await uploadPendingFile(formData.file, uploadPath);
+
+      for (let i = 0; i <= 100; i += 10) {
+        setUploadProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 120));
+      }
+
+      const response = await fetch('/api/pending-uploads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          uploader_name: formData.uploaderName,
+          uploader_email: formData.uploaderEmail,
+          subject: formData.subject,
+          semester: formData.semester,
+          category: formData.category,
+          description: formData.description,
+          file_path: uploadPath,
+          file_name: formData.file.name,
+          file_size_mb: (formData.file.size / 1024 / 1024).toFixed(2),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Upload failed after transfer.');
+      }
+
+      setStatusType('success');
+      setStatusMessage(
+        'File sent to the SFI IMSC Sub-Committee! We will verify the content and publish it shortly. Follow our WhatsApp Channel for the notification.'
+      );
+      setFormData({
+        title: '',
+        uploaderName: '',
+        uploaderEmail: '',
+        subject: '',
+        semester: '',
+        category: '',
+        description: '',
+        file: null,
+      });
+    } catch (error: any) {
+      console.error(error);
+      setStatusType('error');
+      setStatusMessage(
+        error.message || 'Unable to upload the file. Please try again later.'
+      );
+    } finally {
+      setUploadProgress(0);
+    }
   };
 
   return (
@@ -195,6 +254,34 @@ export default function Upload() {
                     className="w-full px-4 py-2 border border-light-gray rounded-lg focus:outline-none focus:border-crimson"
                   />
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <label className="block text-slate-navy font-medium mb-2">
+                      Your Full Name <span className="text-crimson">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="uploaderName"
+                      value={formData.uploaderName}
+                      onChange={handleChange}
+                      placeholder="e.g., Priya Nair"
+                      className="w-full px-4 py-2 border border-light-gray rounded-lg focus:outline-none focus:border-crimson"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-navy font-medium mb-2">
+                      Your Email <span className="text-crimson">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="uploaderEmail"
+                      value={formData.uploaderEmail}
+                      onChange={handleChange}
+                      placeholder="e.g., priya@example.com"
+                      className="w-full px-4 py-2 border border-light-gray rounded-lg focus:outline-none focus:border-crimson"
+                    />
+                  </div>
+                </div>
 
                 {/* File Upload */}
                 <div className="mb-8">
@@ -234,7 +321,7 @@ export default function Upload() {
                       <>
                         <UploadIcon className="text-slate-gray mx-auto mb-3" size={40} />
                         <p className="text-slate-navy font-medium mb-2">
-                          Drag and drop your PDF here, or click to browse
+                          Knowledge is power. Drop your PDF here, or click to browse.
                         </p>
                         <p className="text-small text-slate-gray mb-4">
                           Maximum file size: 50 MB
@@ -268,6 +355,20 @@ export default function Upload() {
                   </div>
                 )}
 
+                {statusMessage && (
+                  <div
+                    className={`mb-6 p-4 rounded-lg text-sm ${
+                      statusType === 'success'
+                        ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
+                        : statusType === 'error'
+                        ? 'bg-red-50 text-red-900 border border-red-200'
+                        : 'bg-slate-50 text-slate-800 border border-slate-200'
+                    }`}
+                  >
+                    {statusMessage}
+                  </div>
+                )}
+
                 {/* Submit Button */}
                 <button
                   type="submit"
@@ -282,6 +383,9 @@ export default function Upload() {
                   <p className="text-small text-slate-navy">
                     ℹ️ Your submission will be reviewed by moderators before being published. Make sure your document is
                     relevant and high-quality!
+                  </p>
+                  <p className="text-small text-slate-navy mt-2">
+                    Follow our <a href="https://whatsapp.com/channel/0029VaesYjiHgZWZT1NwWo1z" target="_blank" rel="noreferrer" className="text-crimson underline">WhatsApp Channel</a> for approval updates.
                   </p>
                 </div>
               </form>
