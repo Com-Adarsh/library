@@ -8,10 +8,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'crimson': '#BC0000',
-        'slate-navy': '#1E293B',
+        'crimson': '#D70A0A', // High-energy Crimson
+        'slate-navy': '#0A192F', // Deep Space Navy
         'ghost-white': '#F8FAFC',
-        'emerald': '#059669',
+        'emerald': '#00C853', // Vivid Emerald Green for 'Verified' and 'Live' states
         'sky-blue': '#2563EB',
         'slate-gray': '#64748B',
         'light-gray': '#E2E8F0',

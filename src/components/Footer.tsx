@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import SocialHub from './SocialHub';
 
 interface RecentUpload {
   id: string;
@@ -76,9 +75,32 @@ export default function Footer() {
         {/* Divider */}
         <div className="border-t border-slate-200 my-8"></div>
 
-        {/* Social Hub - Community Connection Section */}
-        <div className="bg-gradient-to-r from-crimson/5 to-blue-500/5 border border-crimson/20 rounded-xl p-8 mb-8">
-          <SocialHub variant="horizontal" showCounter={true} />
+        {/* Community Channels Section */}
+        <div className="bg-gradient-to-r from-emerald-50 to-crimson/5 border border-emerald-200 rounded-xl p-8 mb-8">
+          <div className="text-center mb-6">
+            <h4 className="font-bold text-slate-navy text-xl mb-2">🌟 Community Channels</h4>
+            <p className="text-slate-600 text-sm">Stay connected with the IMSC community</p>
+          </div>
+          <div className="flex justify-center gap-6">
+            <a
+              href="https://whatsapp.com/channel/0029VaesYjiHgZWZT1NwWo1z"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <span className="text-2xl">💬</span>
+              WhatsApp Channel
+            </a>
+            <a
+              href="https://www.instagram.com/sfi_imsc_subcommittee_cusat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-pink-600 hover:to-purple-600 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <span className="text-2xl">📸</span>
+              Instagram
+            </a>
+          </div>
         </div>
 
         {/* Divider */}
@@ -135,10 +157,10 @@ export default function Footer() {
 
         {/* Final Footer */}
         <div className="text-center space-y-4">
-          <div className="bg-slate-navy text-white rounded-lg p-6 mb-4">
+          <div className="bg-gradient-to-r from-slate-navy to-crimson text-white rounded-lg p-6 mb-4">
             <h4 className="font-bold text-lg mb-2">🗳️ Connect with the Collective</h4>
             <p className="text-sm leading-relaxed">
-              <span className="font-semibold">The IMSC Commons is more than a repository—it is a community.</span> For live updates on campus politics, academic announcements, and student welfare initiatives, follow the <span className="text-green-300 font-semibold">SFI CUSAT WhatsApp Channel</span> and our <span className="text-pink-300 font-semibold">Instagram</span>. We believe in transparent, real-time communication as the backbone of a democratic campus.
+              <span className="font-semibold">The IMSC Commons is more than a repository—it is a community.</span> For live updates on campus politics, academic announcements, and student welfare initiatives, follow our vibrant <span className="text-emerald-300 font-bold text-lg">Community Channels</span> above. We believe in transparent, real-time communication as the backbone of a democratic campus.
             </p>
           </div>
           

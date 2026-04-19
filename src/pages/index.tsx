@@ -2,11 +2,14 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { BookOpen, Users, MessageSquare, Zap, Download, TrendingUp, Atom, TestTube2, Divide, Dna, BarChart3, Leaf, Globe, Sun } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import SciencePulse from '@/components/SciencePulse';
 import NewsTicker from '@/components/NewsTicker';
 import SocialHub from '@/components/SocialHub';
 import Footer from '@/components/Footer';
+import FloatingHistoryPulseWidget from '@/components/FloatingHistoryPulseWidget';
+import ToolDock from '@/components/ToolDock';
 import { SUBJECTS } from '@/lib/constants';
 
 export default function Home() {
@@ -29,50 +32,80 @@ export default function Home() {
       <Navigation />
 
       <main className="min-h-screen">
-        {/* Enhanced Hero Section with Building Image */}
+        {/* Enhanced Hero Section with Cinematic CUSAT Background */}
         <section className="pt-20 pb-20 bg-cover bg-center text-white relative overflow-hidden h-screen flex items-center justify-center"
                  style={{
-                   backgroundImage: 'linear-gradient(135deg, rgba(30, 41, 59, 0.65), rgba(188, 0, 0, 0.25)), url(\'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&h=1080&fit=crop\')',
+                   backgroundImage: 'linear-gradient(135deg, rgba(10, 25, 47, 0.8), rgba(215, 10, 10, 0.3)), url(\'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=1080&fit=crop\')',
                    backgroundSize: 'cover',
                    backgroundPosition: 'center',
                    backgroundAttachment: 'fixed'
                  }}>
-          
+
           {/* Glassmorphism Overlay */}
-          <div className="absolute inset-0 bg-white/5 backdrop-blur-sm"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-navy/80 via-slate-navy/60 to-crimson/30 backdrop-blur-[10px]"></div>
 
-          {/* Gradient Overlay - More dramatic */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-navy/60 via-slate-navy/40 to-transparent"></div>
-
-          {/* Dark vignette for text readability */}
+          {/* Parallax Effect Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30"></div>
 
           <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-center max-w-4xl mx-auto"
+            >
               {/* Welcome Badge */}
-              <div className="mb-6 inline-block">
-                <span className="bg-crimson/90 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-md">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="mb-6 inline-block"
+              >
+                <span className="bg-crimson/90 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-md border border-white/20">
                   🎓 Welcome to The IMSC Commons
                 </span>
-              </div>
+              </motion.div>
 
               {/* Main Heading */}
-              <h1 className="text-h1 mb-4 font-poppins font-bold drop-shadow-lg text-white" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-h1 mb-4 font-poppins font-bold drop-shadow-lg text-white"
+                style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
+              >
                 Knowledge is a Public Right
-              </h1>
+              </motion.h1>
 
               {/* Subheading */}
-              <p className="text-2xl font-light mb-2 opacity-98 drop-shadow-md text-white" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="text-2xl font-light mb-2 opacity-98 drop-shadow-md text-white"
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
+              >
                 Access textbooks, papers, and scientific progress for the IMSC community
-              </p>
+              </motion.p>
 
               {/* Democratic message */}
-              <p className="text-lg opacity-95 mb-12 font-inter drop-shadow-md text-white" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.8 }}
+                className="text-lg opacity-95 mb-12 font-inter drop-shadow-md text-white"
+                style={{ textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
+              >
                 A secular, student-governed digital repository at CUSAT. Managed by SFI IMSC Sub-Committee.
-              </p>
+              </motion.p>
 
               {/* Global Search Bar */}
-              <div className="mb-12 max-w-2xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="mb-12 max-w-2xl mx-auto"
+              >
                 <div className="relative">
                   <input
                     type="text"
@@ -84,25 +117,44 @@ export default function Home() {
                   </button>
                 </div>
                 <p className="text-sm opacity-80 mt-3 drop-shadow-md">💡 Tip: Try searching for specific topics, exam years, or resource types</p>
-              </div>
+              </motion.div>
 
               {/* News Ticker */}
-              <NewsTicker />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2, duration: 0.6 }}
+              >
+                <NewsTicker />
+              </motion.div>
 
               {/* CTA Buttons */}
-              <div className="flex gap-4 justify-center flex-wrap">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4, duration: 0.6 }}
+                className="flex gap-4 justify-center flex-wrap"
+              >
                 <Link href="/subject/physics?type=question_paper">
-                  <button className="bg-crimson text-white px-8 py-4 rounded-lg font-bold hover:bg-red-700 transition transform hover:scale-105 shadow-lg text-lg">
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(215, 10, 10, 0.3)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-crimson text-white px-8 py-4 rounded-lg font-bold hover:bg-red-700 transition transform shadow-lg text-lg"
+                  >
                     📚 Browse Library
-                  </button>
+                  </motion.button>
                 </Link>
                 <Link href="/upload">
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-slate-navy transition transform hover:scale-105 shadow-lg text-lg">
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(255, 255, 255, 0.2)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-slate-navy transition shadow-lg text-lg"
+                  >
                     ⬆️ Share Resources
-                  </button>
+                  </motion.button>
                 </Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
@@ -209,82 +261,114 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {SUBJECTS.map((subject) => {
+              {SUBJECTS.map((subject, index) => {
                 // Map string icon names to actual components with specific animations
                 const getIconWithAnimation = (iconName: string) => {
                   const baseClasses = "mx-auto transition-all duration-300";
-                  
+
                   const iconMap: { [key: string]: { component: React.ReactNode; animation: string } } = {
-                    'Atom': { 
-                      component: <Atom size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:animate-spin'
+                    'Atom': {
+                      component: <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Atom size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'TestTube2': { 
+                    'TestTube2': {
                       component: <TestTube2 size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-125'
                     },
-                    'Divide': { 
-                      component: <Divide size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:rotate-180'
+                    'Divide': {
+                      component: <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Divide size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'Dna': { 
+                    'Dna': {
                       component: <Dna size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-110'
                     },
-                    'BarChart3': { 
+                    'BarChart3': {
                       component: <BarChart3 size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:animate-pulse'
                     },
-                    'Leaf': { 
+                    'Leaf': {
                       component: <Leaf size={48} className={`text-emerald-600 ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-110'
                     },
-                    'Globe': { 
-                      component: <Globe size={48} className={`text-blue-600 ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:animate-spin'
+                    'Globe': {
+                      component: <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Globe size={48} className={`text-blue-600 ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'Sun': { 
-                      component: <Sun size={48} className={`text-amber-500 ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:animate-pulse'
+                    'Sun': {
+                      component: <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Sun size={48} className={`text-amber-500 ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'BookOpen': { 
+                    'BookOpen': {
                       component: <BookOpen size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-110'
                     },
                   };
 
-                  const iconData = iconMap[iconName] || { 
+                  const iconData = iconMap[iconName] || {
                     component: <BookOpen size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                     animation: 'group-hover:scale-110'
                   };
-                  
+
                   return iconData;
                 };
 
                 const { component: icon, animation } = getIconWithAnimation(subject.icon);
 
                 return (
-                  <Link
+                  <motion.div
                     key={subject.name}
-                    href={`/subject/${subject.name.replace(/\s+/g, '-').toLowerCase()}?type=question_paper`}
+                    initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 100
+                    }}
                   >
-                    <div className="card hover:shadow-xl hover:border-crimson hover:scale-105 transition-all duration-300 cursor-pointer group text-center p-6 bg-white border border-slate-200">
-                      {/* Animated Icon Container */}
-                      <div className={`mb-4 flex items-center justify-center h-20 ${animation}`}>
-                        {icon}
+                    <Link href={`/subject/${subject.name.replace(/\s+/g, '-').toLowerCase()}?type=question_paper`}>
+                      <div className="card hover:shadow-xl hover:border-crimson hover:scale-105 transition-all duration-300 cursor-pointer group text-center p-6 bg-white border border-slate-200">
+                        {/* Animated Icon Container */}
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          className={`mb-4 flex items-center justify-center h-20 ${animation}`}
+                        >
+                          {icon}
+                        </motion.div>
+
+                        {/* Subject Name */}
+                        <h3 className="font-bold text-slate-navy mb-2 group-hover:text-crimson transition">
+                          {subject.name}
+                        </h3>
+
+                        {/* Hover CTA */}
+                        <p className="text-small text-slate-gray group-hover:text-crimson transition font-medium">
+                          Explore →
+                        </p>
                       </div>
-
-                      {/* Subject Name */}
-                      <h3 className="font-bold text-slate-navy mb-2 group-hover:text-crimson transition">
-                        {subject.name}
-                      </h3>
-
-                      {/* Hover CTA */}
-                      <p className="text-small text-slate-gray group-hover:text-crimson transition font-medium">
-                        Explore →
-                      </p>
-                    </div>
-                  </Link>
+                    </Link>
+                  </motion.div>
                 );
               })}
             </div>
@@ -351,6 +435,12 @@ export default function Home() {
 
         {/* Floating Social Hub */}
         <SocialHub variant="floating" showCounter={true} />
+
+        {/* Floating History & Pulse Widget */}
+        <FloatingHistoryPulseWidget />
+
+        {/* Tool Dock */}
+        <ToolDock />
       </main>
     </>
   );
