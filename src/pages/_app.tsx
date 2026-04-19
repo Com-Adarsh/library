@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 import { AuthProvider } from '@/lib/auth-context';
 import Navigation from '@/components/Navigation';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 export default function App({ Component, pageProps }: AppProps) {
   // Check if page should hide navigation (like login page)
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <AuthProvider>
       {showNavigation && <Navigation />}
       <Component {...pageProps} />
+      <SpeedInsights />
     </AuthProvider>
   );
 }
