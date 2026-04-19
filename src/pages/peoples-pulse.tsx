@@ -88,35 +88,71 @@ const MOCK_ARTICLES: NewsArticle[] = [
 
 const MANDELA_QUOTE = '"Education is the most powerful weapon which you can use to change the world." — Nelson Mandela';
 
+const CACHE_KEY = 'peoples_pulse_cache';
+const CACHE_TIMESTAMP_KEY = 'peoples_pulse_timestamp';
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
 export default function PeoplesPulse() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [articles, setArticles] = useState<NewsArticle[]>(MOCK_ARTICLES);
   const [loading, setLoading] = useState(false);
   const [timeAgo, setTimeAgo] = useState<{ [key: string]: string }>({});
   const [apiReady, setApiReady] = useState(false);
-  const [newsScope, setNewsScope] = useState<'local' | 'global'>('local'); // Local/Global toggle
+  const [newsScope, setNewsScope] = useState<'local' | 'global'>('local');
+  const [cacheStatus, setCacheStatus] = useState<{
+    cached: boolean;
+    nextRefresh?: string;
+    source?: string;
+  }>({
+    cached: false,
+  });
 
   // Fetch from NewsAPI on component mount and when newsScope changes
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
+        
+        // Check if we have cached data that's still valid
+        const lastFetch = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+        const now = Date.now();
+        const timeSinceLastFetch = lastFetch ? now - parseInt(lastFetch) : Infinity;
+
+        // If cache exists and is less than 24 hours old, use it
+        if (timeSinceLastFetch < CACHE_DURATION && localStorage.getItem(CACHE_KEY)) {
+          try {
+            const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY) || '');
+            if (cachedData && cachedData.articles && cachedData.articles.length > 0) {
+              setArticles(cachedData.articles);
+              setApiReady(true);
+              setCacheStatus({
+                cached: true,
+                source: cachedData.source,
+                nextRefresh: cachedData.nextRefresh
+              });
+              setLoading(false);
+              return;
+            }
+          } catch (e) {
+            console.log('Cache parse error, fetching fresh data');
+          }
+        }
+
+        // Fetch fresh data from API
         const keywords = ['science', 'sociology', 'public education', 'social justice', 'labour rights'];
         const query = keywords.join(' OR ');
-        
-        // Add cache-busting timestamp
         const timestamp = new Date().getTime();
+
         const response = await fetch(
           `/api/news?q=${encodeURIComponent(query)}&local=${newsScope === 'local' ? 'true' : 'false'}&t=${timestamp}`,
           {
             headers: {
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Pragma': 'no-cache',
+              'Cache-Control': 'max-age=86400',
             }
           }
         );
         const data = await response.json();
-        
+
         if (data.articles && data.articles.length > 0) {
           // Filter for recent articles (Jan 2026 onwards)
           const filteredArticles = data.articles
@@ -135,10 +171,26 @@ export default function PeoplesPulse() {
                 liveMinutesAgo: minutesAgo
               };
             });
-          
+
           if (filteredArticles.length > 0) {
-            setArticles(filteredArticles.slice(0, 12)); // Limit to 12
+            setArticles(filteredArticles.slice(0, 12));
             setApiReady(true);
+            
+            // Cache the results
+            const cacheData = {
+              articles: filteredArticles.slice(0, 12),
+              source: data.source,
+              nextRefresh: data.nextRefresh,
+              timestamp: new Date().toISOString()
+            };
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, now.toString());
+            
+            setCacheStatus({
+              cached: false,
+              source: data.source,
+              nextRefresh: data.nextRefresh
+            });
           } else {
             setArticles(MOCK_ARTICLES);
             setApiReady(false);
@@ -241,10 +293,19 @@ export default function PeoplesPulse() {
           </p>
           <p className="text-white/90 text-lg drop-shadow-md">🚀 Current affairs for conscious students</p>
           
-          {/* Status Indicator */}
-          <div className="mt-4 flex items-center gap-2 bg-white/20 backdrop-blur px-4 py-2 rounded-full">
-            <span className={`w-2 h-2 ${apiReady ? 'bg-emerald' : 'bg-amber'} rounded-full animate-pulse`}></span>
-            <span className="text-white text-sm font-medium">{apiReady ? 'Live Data Active' : 'Loading Updates'}</span>
+          {/* Status Indicator - Daily Cache Status */}
+          <div className="mt-4 flex flex-col items-center gap-3">
+            <div className="flex items-center gap-2 bg-white/20 backdrop-blur px-4 py-2 rounded-full">
+              <span className={`w-2 h-2 ${apiReady ? 'bg-emerald' : 'bg-amber'} rounded-full animate-pulse`}></span>
+              <span className="text-white text-sm font-medium">
+                {cacheStatus.cached ? '📦 Cached Data (24h)' : apiReady ? '🔄 Live Data Active' : '⏳ Loading Updates'}
+              </span>
+            </div>
+            {cacheStatus.nextRefresh && (
+              <p className="text-white/80 text-xs font-mono">
+                Next refresh: {new Date(cacheStatus.nextRefresh).toLocaleDateString('en-IN')} {new Date(cacheStatus.nextRefresh).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })}
+              </p>
+            )}
           </div>
         </div>
       </div>

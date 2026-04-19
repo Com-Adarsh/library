@@ -35,11 +35,15 @@ const isAcademicContent = (title: string, description: string): boolean => {
   return academicKeywords.some(keyword => text.includes(keyword));
 };
 
+// Simple in-memory cache for the API responses
+const newsCache: { [key: string]: { data: any; timestamp: number } } = {};
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Set no-cache headers for real-time data
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+  // Set cache headers for daily updates (24 hours)
+  res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+  res.setHeader('Pragma', 'cache');
+  res.setHeader('Expires', new Date(Date.now() + CACHE_DURATION).toUTCString());
 
   if (req.method === 'GET') {
     try {
@@ -49,34 +53,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const queryString = Array.isArray(q) ? q[0] : (q || 'science education');
       const localScope = Array.isArray(local) ? local[0] : local;
       
+      // Create cache key based on query and scope
+      const cacheKey = `${queryString}:${localScope}`;
+      
+      // Check if cached data is still valid (24 hours)
+      if (newsCache[cacheKey]) {
+        const { data, timestamp } = newsCache[cacheKey];
+        const age = Date.now() - timestamp;
+        
+        if (age < CACHE_DURATION) {
+          // Return cached data if less than 24 hours old
+          return res.status(200).json({ 
+            articles: data.articles,
+            source: 'cache',
+            cached: true,
+            cacheAge: Math.floor(age / 1000), // Age in seconds
+            nextRefresh: new Date(timestamp + CACHE_DURATION).toISOString(),
+            timestamp: new Date(timestamp).toISOString(),
+            total: data.articles.length
+          });
+        }
+      }
+      
       // If NewsAPI key is not configured, return mock data
       const apiKey = process.env.NEXT_PUBLIC_NEWSAPI_KEY;
       if (!apiKey || apiKey === 'your_newsapi_key') {
+        const mockData = { articles: [] };
+        newsCache[cacheKey] = { data: mockData, timestamp: Date.now() };
         return res.status(200).json({ 
           articles: [],
           source: 'mock',
+          cached: false,
           timestamp: new Date().toISOString()
         });
       }
 
-      // Build NewsAPI query with cache-busting timestamp
+      // Build NewsAPI query
       let newsApiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(queryString)}&sortBy=publishedAt&language=en&pageSize=50&apiKey=${apiKey}`;
-      
-      // Add timestamp for cache-busting
-      const now = new Date().getTime();
-      newsApiUrl += `&t=${now}`;
 
       // Add domain filtering for local news if requested
       if (localScope === 'true') {
         newsApiUrl += '&domains=thehindu.com,indianexpress.com,deccanherald.com,firstpost.com';
       }
 
-      const response = await fetch(newsApiUrl, {
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        }
-      });
+      const response = await fetch(newsApiUrl);
 
       if (!response.ok) {
         throw new Error(`NewsAPI error: ${response.status}`);
@@ -109,9 +129,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }))
         .slice(0, 20); // Limit to 20 articles
 
+      // Cache the results
+      const cacheData = { articles: cleanedArticles };
+      newsCache[cacheKey] = { data: cacheData, timestamp: Date.now() };
+
       res.status(200).json({ 
         articles: cleanedArticles,
-        source: 'newsapi',
+        source: 'newsapi-fresh',
+        cached: false,
+        nextRefresh: new Date(Date.now() + CACHE_DURATION).toISOString(),
         timestamp: new Date().toISOString(),
         total: cleanedArticles.length
       });
