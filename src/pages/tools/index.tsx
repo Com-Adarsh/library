@@ -1,6 +1,5 @@
-import { Calculator, Gauge, BookOpen } from 'lucide-react';
+import { Gauge, BookOpen } from 'lucide-react';
 import Navigation from '../../components/Navigation';
-import ScientificCalculator from '../../components/ScientificCalculator';
 
 export default function Tools() {
   return (
@@ -25,37 +24,25 @@ export default function Tools() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Scientific Calculator Section */}
+        {/* Study Tools Content */}
         <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-3 bg-crimson/10 rounded-lg">
-              <Calculator className="w-6 h-6 text-crimson" />
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold text-slate-navy">Scientific Calculator</h2>
-              <p className="text-slate-600 text-sm mt-1">Advanced calculations for physics, chemistry, mathematics & engineering</p>
-            </div>
-          </div>
-
-          {/* Calculator */}
-          <div className="bg-white rounded-xl p-8 shadow-lg border border-slate-200">
-            <ScientificCalculator compact={false} />
-          </div>
-
-          {/* Features */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            {[
-              { icon: '⚙️', title: 'Basic Arithmetic', desc: '+, −, ×, ÷' },
-              { icon: '📐', title: 'Trigonometry', desc: 'sin, cos, tan' },
-              { icon: '📊', title: 'Logarithms', desc: 'log, ln, log₂' },
-              { icon: '⚡', title: 'Powers & Roots', desc: 'x^y, √, ∛' },
-            ].map((feat, i) => (
-              <div key={i} className="bg-slate-50 rounded-lg p-4 border border-slate-200 text-center">
-                <div className="text-2xl mb-2">{feat.icon}</div>
-                <h4 className="font-bold text-slate-navy text-sm mb-1">{feat.title}</h4>
-                <p className="text-xs text-slate-600">{feat.desc}</p>
+          <div className="bg-white rounded-xl p-10 shadow-lg border border-slate-200">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-3xl font-bold text-slate-navy">Study Tools</h2>
+              <p className="text-slate-600 text-sm max-w-3xl">
+                Our study tools section is being updated. You can still access uploads and resources while we improve the toolset.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2 mt-8">
+                <div className="p-6 bg-slate-50 rounded-lg border border-slate-200">
+                  <h3 className="font-semibold text-slate-navy mb-2">Resource Center</h3>
+                  <p className="text-slate-600 text-sm">Search and download papers, textbooks, and notes for every semester.</p>
+                </div>
+                <div className="p-6 bg-slate-50 rounded-lg border border-slate-200">
+                  <h3 className="font-semibold text-slate-navy mb-2">Community Help</h3>
+                  <p className="text-slate-600 text-sm">Ask questions, collaborate with peers, and learn from discussion threads.</p>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
 

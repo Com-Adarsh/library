@@ -4,11 +4,9 @@ import Link from 'next/link';
 import { BookOpen, Users, MessageSquare, Zap, Download, TrendingUp, Atom, TestTube2, Divide, Dna, BarChart3, Leaf, Globe, Sun } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import SciencePulse from '@/components/SciencePulse';
 import NewsTicker from '@/components/NewsTicker';
 import SocialHub from '@/components/SocialHub';
 import Footer from '@/components/Footer';
-import FloatingHistoryPulseWidget from '@/components/FloatingHistoryPulseWidget';
 import ToolDock from '@/components/ToolDock';
 import { SUBJECTS } from '@/lib/constants';
 
@@ -375,9 +373,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Science Pulse */}
-        <SciencePulse limit={3} showViewMore={true} />
-
         {/* Features Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
@@ -435,9 +430,6 @@ export default function Home() {
 
         {/* Floating Social Hub */}
         <SocialHub variant="floating" showCounter={true} />
-
-        {/* Floating History & Pulse Widget */}
-        <FloatingHistoryPulseWidget />
 
         {/* Tool Dock */}
         <ToolDock />
