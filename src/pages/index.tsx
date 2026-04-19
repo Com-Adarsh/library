@@ -17,57 +17,8 @@ export default function Home() {
     { label: 'Active Daily', value: '24/7', icon: Zap },
   ];
 
-  // Most downloaded resources this month
-  const mostDownloaded = [
-    {
-      id: '1',
-      title: 'Physics Sem 5 - Question Papers (Last 5 Years)',
-      subject: 'Physics',
-      downloads: 342,
-      uploadedBy: 'Adarsh K.',
-      category: 'Question Paper',
-    },
-    {
-      id: '2',
-      title: 'Organic Chemistry Complete Notes',
-      subject: 'Chemistry',
-      downloads: 298,
-      uploadedBy: 'Priya S.',
-      category: 'Student Notes',
-    },
-    {
-      id: '3',
-      title: 'Quantum Mechanics - CUSAT Syllabus Edition',
-      subject: 'Physics',
-      downloads: 276,
-      uploadedBy: 'Ravi T.',
-      category: 'Textbook',
-    },
-    {
-      id: '4',
-      title: 'Molecular Biology Lab Manual',
-      subject: 'Biology',
-      downloads: 245,
-      uploadedBy: 'Maya Patel',
-      category: 'Practical Guide',
-    },
-    {
-      id: '5',
-      title: 'Statistics & Probability - Complete Solutions',
-      subject: 'Mathematics',
-      downloads: 218,
-      uploadedBy: 'Nikhil Roy',
-      category: 'Solution Book',
-    },
-    {
-      id: '6',
-      title: 'Photonics - Exam Preparation Guide',
-      subject: 'Photonics',
-      downloads: 195,
-      uploadedBy: 'Asha Devi',
-      category: 'Study Guide',
-    },
-  ];
+  // Most downloaded resources this month - from database
+  const mostDownloaded: any[] = [];
 
   return (
     <>
@@ -174,50 +125,68 @@ export default function Home() {
             </div>
             <p className="text-slate-gray mb-12">Popular resources that are helping students prepare for exams</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mostDownloaded.map((resource, index) => (
-                <div
-                  key={resource.id}
-                  className="card hover:shadow-lg hover:border-crimson transition group flex flex-col"
-                >
-                  {/* Rank Badge */}
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-crimson text-white font-bold text-small">
-                      #{index + 1}
+            {mostDownloaded.length === 0 ? (
+              // Empty state when no resources uploaded
+              <div className="text-center py-12 bg-white rounded-lg border border-light-gray">
+                <TrendingUp className="text-slate-gray mx-auto mb-4 opacity-30" size={64} />
+                <p className="text-slate-gray text-lg mb-6">Be the first to contribute resources!</p>
+                <p className="text-slate-gray mb-6 max-w-2xl mx-auto">
+                  Start building our community library by uploading question papers, textbooks, and study materials. Your contributions help thousands of students succeed.
+                </p>
+                <Link href="/upload">
+                  <button className="bg-crimson text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition">
+                    Upload Resources Now
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {mostDownloaded.map((resource, index) => (
+                    <div
+                      key={resource.id}
+                      className="card hover:shadow-lg hover:border-crimson transition group flex flex-col"
+                    >
+                      {/* Rank Badge */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-crimson text-white font-bold text-small">
+                          #{index + 1}
+                        </div>
+                        <span className="text-small font-medium text-slate-gray px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full">
+                          {resource.category}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-h3 text-slate-navy mb-2 group-hover:text-crimson transition line-clamp-2 flex-grow">
+                        {resource.title}
+                      </h3>
+
+                      {/* Subject */}
+                      <p className="text-slate-gray text-small mb-3">{resource.subject}</p>
+
+                      {/* Downloads & Author */}
+                      <div className="flex items-center justify-between pt-4 border-t border-light-gray">
+                        <div className="flex items-center gap-2 text-small text-slate-gray">
+                          <Download size={16} className="text-emerald-600" />
+                          <span className="font-semibold text-emerald-600">{resource.downloads}</span>
+                        </div>
+                        <span className="text-small text-slate-gray">by {resource.uploadedBy}</span>
+                      </div>
                     </div>
-                    <span className="text-small font-medium text-slate-gray px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full">
-                      {resource.category}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-h3 text-slate-navy mb-2 group-hover:text-crimson transition line-clamp-2 flex-grow">
-                    {resource.title}
-                  </h3>
-
-                  {/* Subject */}
-                  <p className="text-slate-gray text-small mb-3">{resource.subject}</p>
-
-                  {/* Downloads & Author */}
-                  <div className="flex items-center justify-between pt-4 border-t border-light-gray">
-                    <div className="flex items-center gap-2 text-small text-slate-gray">
-                      <Download size={16} className="text-emerald-600" />
-                      <span className="font-semibold text-emerald-600">{resource.downloads}</span>
-                    </div>
-                    <span className="text-small text-slate-gray">by {resource.uploadedBy}</span>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* View All Button */}
-            <div className="text-center mt-8">
-              <Link href="/leaderboard">
-                <button className="border-2 border-crimson text-crimson px-8 py-3 rounded-lg font-medium hover:bg-crimson hover:text-white transition">
-                  See More Top Resources →
-                </button>
-              </Link>
-            </div>
+                {/* View All Button */}
+                <div className="text-center mt-8">
+                  <Link href="/leaderboard">
+                    <button className="border-2 border-crimson text-crimson px-8 py-3 rounded-lg font-medium hover:bg-crimson hover:text-white transition">
+                      See More Top Resources →
+                    </button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </section>
 
