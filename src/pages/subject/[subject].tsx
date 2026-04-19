@@ -25,39 +25,9 @@ export default function SubjectPage() {
   const displayType = resourceType === 'question_paper' ? 'Question Papers' : 'Textbooks';
   const isTextbook = resourceType === 'textbook';
 
-  // Mock textbook data - replace with actual API call
-  const textbooks = [
-    {
-      id: 1,
-      title: `${subjectData.name} Fundamentals - 3rd Edition`,
-      author: 'Dr. John Smith',
-      size: 12.5,
-      uploadedBy: 'Adarsh Kumar',
-      uploadedAt: '2025-01-15',
-      downloads: 324,
-      description: 'Comprehensive textbook covering core concepts and applications'
-    },
-    {
-      id: 2,
-      title: `${subjectData.name} Advanced Topics`,
-      author: 'Prof. Sarah Chen',
-      size: 8.3,
-      uploadedBy: 'Priya Patel',
-      uploadedAt: '2025-02-20',
-      downloads: 187,
-      description: 'Advanced level content for in-depth understanding'
-    },
-    {
-      id: 3,
-      title: `${subjectData.name} Problem Solving Workbook`,
-      author: 'Dr. Michael Ross',
-      size: 5.7,
-      uploadedBy: 'Nikhil Sharma',
-      uploadedAt: '2025-03-10',
-      downloads: 256,
-      description: 'Practical problems and solutions with explanations'
-    },
-  ];
+  // Real data from database - empty until resources are uploaded
+  const textbooks: any[] = [];
+  const questionPapersBySubject: { [key: number]: any[] } = {}; // Organize by semester
 
   return (
     <>
@@ -125,35 +95,54 @@ export default function SubjectPage() {
           // QUESTION PAPERS - Show Semester Grid
           <section className="py-12 bg-white">
             <div className="container mx-auto px-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {SEMESTERS.filter((sem) =>
-                  filterType === 'all' || sem.type === (filterType === 'odd' ? 'Odd' : 'Even')
-                ).map((semester) => (
-                  <Link
-                    key={semester.id}
-                    href={`/subject/${subject}/semester/${semester.id}?type=${resourceType}`}
-                  >
-                    <div className="card cursor-pointer transform hover:scale-105 transition-transform hover:border-crimson">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="bg-crimson text-white rounded-lg p-3">
-                          <FileText size={32} />
-                        </div>
-                        <div>
-                          <h3 className="text-h3 font-bold text-slate-navy">{semester.name}</h3>
-                          <p className="text-slate-gray">{semester.type} Semester</p>
-                        </div>
-                      </div>
-                      <p className="text-small text-slate-gray">
-                        Click to view all {displayType.toLowerCase()} for this semester
-                      </p>
-                      <div className="mt-4 flex items-center justify-between">
-                        <span className="text-small text-slate-gray">0 resources</span>
-                        <span className="text-crimson font-medium">→</span>
-                      </div>
-                    </div>
+              {Object.keys(questionPapersBySubject).length === 0 ? (
+                // No question papers uploaded
+                <div className="text-center py-12 bg-ghost-white rounded-lg">
+                  <FileText size={48} className="text-slate-gray mx-auto mb-4 opacity-50" />
+                  <p className="text-slate-gray text-lg mb-6">No question papers available yet for {subjectData.name}</p>
+                  <Link href="/upload">
+                    <button className="bg-crimson text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition">
+                      Be the first to contribute
+                    </button>
                   </Link>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {SEMESTERS.filter((sem) => {
+                    // Only show semesters with actual resources
+                    if (!questionPapersBySubject[sem.id] || questionPapersBySubject[sem.id].length === 0) {
+                      return false;
+                    }
+                    
+                    // Apply filter
+                    return filterType === 'all' || sem.type === (filterType === 'odd' ? 'Odd' : 'Even');
+                  }).map((semester) => (
+                    <Link
+                      key={semester.id}
+                      href={`/subject/${subject}/semester/${semester.id}?type=${resourceType}`}
+                    >
+                      <div className="card cursor-pointer transform hover:scale-105 transition-transform hover:border-crimson">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="bg-crimson text-white rounded-lg p-3">
+                            <FileText size={32} />
+                          </div>
+                          <div>
+                            <h3 className="text-h3 font-bold text-slate-navy">{semester.name}</h3>
+                            <p className="text-slate-gray">{semester.type} Semester</p>
+                          </div>
+                        </div>
+                        <p className="text-small text-slate-gray">
+                          Click to view all {displayType.toLowerCase()} for this semester
+                        </p>
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="text-small text-slate-gray">{questionPapersBySubject[semester.id]?.length || 0} resources</span>
+                          <span className="text-crimson font-medium">→</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         ) : (

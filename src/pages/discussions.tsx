@@ -20,68 +20,7 @@ interface Thread {
 }
 
 export default function Discussions() {
-  const [threads, setThreads] = useState<Thread[]>([
-    {
-      id: '1',
-      title: 'Master Differential Equations: Step-by-Step Guide',
-      content: 'Complete walkthrough of integration techniques used in CUSAT exams. Includes practice problems.',
-      author: 'Senior Mentor - Physics',
-      subject: 'Mathematics',
-      replies: 24,
-      views: 512,
-      createdAt: '2024-03-28',
-      tags: ['#DE', '#Important'],
-      category: 'tips',
-      isAnswered: true,
-      isPinned: true,
-      isHelpful: 47,
-    },
-    {
-      id: '2',
-      title: 'Question Paper Patterns: Physics Sem 5 (Last 5 Years)',
-      content: 'Analyzed all question papers from 2019-2024. Key topics covered in detail.',
-      author: 'Adarsh K.',
-      subject: 'Physics',
-      replies: 18,
-      views: 289,
-      createdAt: '2024-04-05',
-      tags: ['#QP', '#Pattern', '#Sem5'],
-      category: 'resources',
-      isAnswered: true,
-      isPinned: false,
-      isHelpful: 32,
-    },
-    {
-      id: '3',
-      title: 'Best YouTube Channels for Quantum Mechanics',
-      content: 'Need recommendations for clear explanations of QM concepts.',
-      author: 'Priya S.',
-      subject: 'Physics',
-      replies: 8,
-      views: 145,
-      createdAt: '2024-04-10',
-      tags: ['#Resources', '#QM'],
-      category: 'help',
-      isAnswered: false,
-      isPinned: false,
-      isHelpful: 12,
-    },
-    {
-      id: '4',
-      title: 'Chemistry Practical Exams: What to Prepare',
-      content: 'Anyone have experience with practical exams? What were the experiments?',
-      author: 'Ravi T.',
-      subject: 'Chemistry',
-      replies: 6,
-      views: 98,
-      createdAt: '2024-04-11',
-      tags: ['#Practical', '#Help'],
-      category: 'help',
-      isAnswered: false,
-      isPinned: false,
-      isHelpful: 8,
-    },
-  ]);
+  const [threads, setThreads] = useState<Thread[]>([]);
 
   const [showNewThread, setShowNewThread] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');

@@ -2,11 +2,14 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { BookOpen, Users, MessageSquare, Zap, Download, TrendingUp, Atom, TestTube2, Divide, Dna, BarChart3, Leaf, Globe, Sun } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import SciencePulse from '@/components/SciencePulse';
 import NewsTicker from '@/components/NewsTicker';
 import SocialHub from '@/components/SocialHub';
 import Footer from '@/components/Footer';
+import FloatingHistoryPulseWidget from '@/components/FloatingHistoryPulseWidget';
+import ToolDock from '@/components/ToolDock';
 import { SUBJECTS } from '@/lib/constants';
 
 export default function Home() {
@@ -17,57 +20,8 @@ export default function Home() {
     { label: 'Active Daily', value: '24/7', icon: Zap },
   ];
 
-  // Most downloaded resources this month
-  const mostDownloaded = [
-    {
-      id: '1',
-      title: 'Physics Sem 5 - Question Papers (Last 5 Years)',
-      subject: 'Physics',
-      downloads: 342,
-      uploadedBy: 'Adarsh K.',
-      category: 'Question Paper',
-    },
-    {
-      id: '2',
-      title: 'Organic Chemistry Complete Notes',
-      subject: 'Chemistry',
-      downloads: 298,
-      uploadedBy: 'Priya S.',
-      category: 'Student Notes',
-    },
-    {
-      id: '3',
-      title: 'Quantum Mechanics - CUSAT Syllabus Edition',
-      subject: 'Physics',
-      downloads: 276,
-      uploadedBy: 'Ravi T.',
-      category: 'Textbook',
-    },
-    {
-      id: '4',
-      title: 'Molecular Biology Lab Manual',
-      subject: 'Biology',
-      downloads: 245,
-      uploadedBy: 'Maya Patel',
-      category: 'Practical Guide',
-    },
-    {
-      id: '5',
-      title: 'Statistics & Probability - Complete Solutions',
-      subject: 'Mathematics',
-      downloads: 218,
-      uploadedBy: 'Nikhil Roy',
-      category: 'Solution Book',
-    },
-    {
-      id: '6',
-      title: 'Photonics - Exam Preparation Guide',
-      subject: 'Photonics',
-      downloads: 195,
-      uploadedBy: 'Asha Devi',
-      category: 'Study Guide',
-    },
-  ];
+  // Most downloaded resources this month - from database
+  const mostDownloaded: any[] = [];
 
   return (
     <>
@@ -78,42 +32,80 @@ export default function Home() {
       <Navigation />
 
       <main className="min-h-screen">
-        {/* Enhanced Hero Section with Glassmorphism */}
-        <section className="pt-20 pb-20 bg-cover bg-center text-white relative overflow-hidden"
+        {/* Enhanced Hero Section with Cinematic CUSAT Background */}
+        <section className="pt-20 pb-20 bg-cover bg-center text-white relative overflow-hidden h-screen flex items-center justify-center"
                  style={{
-                   backgroundImage: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(188, 0, 0, 0.2)), url(\'https://images.unsplash.com/photo-1580828343064-fde4fc206bc6?w=1920&h=1080&fit=crop\')',
+                   backgroundImage: 'linear-gradient(135deg, rgba(10, 25, 47, 0.8), rgba(215, 10, 10, 0.3)), url(\'https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=1080&fit=crop\')',
                    backgroundSize: 'cover',
-                   backgroundPosition: 'center'
+                   backgroundPosition: 'center',
+                   backgroundAttachment: 'fixed'
                  }}>
-          
-          {/* Glassmorphism Overlay */}
-          <div className="absolute inset-0 bg-white/5 backdrop-blur-sm"></div>
 
-          {/* Background Pattern - Democratic aesthetic */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-0 left-0 w-96 h-96 bg-crimson rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-crimson rounded-full blur-3xl"></div>
-          </div>
+          {/* Glassmorphism Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-navy/80 via-slate-navy/60 to-crimson/30 backdrop-blur-[10px]"></div>
+
+          {/* Parallax Effect Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30"></div>
 
           <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-center max-w-4xl mx-auto"
+            >
+              {/* Welcome Badge */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="mb-6 inline-block"
+              >
+                <span className="bg-crimson/90 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-md border border-white/20">
+                  🎓 Welcome to The IMSC Commons
+                </span>
+              </motion.div>
+
               {/* Main Heading */}
-              <h1 className="text-h1 mb-4 font-poppins font-bold drop-shadow-lg">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-h1 mb-4 font-poppins font-bold drop-shadow-lg text-white"
+                style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
+              >
                 Knowledge is a Public Right
-              </h1>
+              </motion.h1>
 
               {/* Subheading */}
-              <p className="text-2xl font-light mb-2 opacity-98 drop-shadow-md">
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="text-2xl font-light mb-2 opacity-98 drop-shadow-md text-white"
+                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
+              >
                 Access textbooks, papers, and scientific progress for the IMSC community
-              </p>
+              </motion.p>
 
               {/* Democratic message */}
-              <p className="text-lg opacity-90 mb-12 font-inter drop-shadow-md">
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.8 }}
+                className="text-lg opacity-95 mb-12 font-inter drop-shadow-md text-white"
+                style={{ textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}
+              >
                 A secular, student-governed digital repository at CUSAT. Managed by SFI IMSC Sub-Committee.
-              </p>
+              </motion.p>
 
               {/* Global Search Bar */}
-              <div className="mb-12 max-w-2xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="mb-12 max-w-2xl mx-auto"
+              >
                 <div className="relative">
                   <input
                     type="text"
@@ -125,25 +117,44 @@ export default function Home() {
                   </button>
                 </div>
                 <p className="text-sm opacity-80 mt-3 drop-shadow-md">💡 Tip: Try searching for specific topics, exam years, or resource types</p>
-              </div>
+              </motion.div>
 
               {/* News Ticker */}
-              <NewsTicker />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2, duration: 0.6 }}
+              >
+                <NewsTicker />
+              </motion.div>
 
               {/* CTA Buttons */}
-              <div className="flex gap-4 justify-center flex-wrap">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4, duration: 0.6 }}
+                className="flex gap-4 justify-center flex-wrap"
+              >
                 <Link href="/subject/physics?type=question_paper">
-                  <button className="bg-crimson text-white px-8 py-4 rounded-lg font-bold hover:bg-red-700 transition transform hover:scale-105 shadow-lg text-lg">
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(215, 10, 10, 0.3)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-crimson text-white px-8 py-4 rounded-lg font-bold hover:bg-red-700 transition transform shadow-lg text-lg"
+                  >
                     📚 Browse Library
-                  </button>
+                  </motion.button>
                 </Link>
                 <Link href="/upload">
-                  <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-slate-navy transition transform hover:scale-105 shadow-lg text-lg">
+                  <motion.button
+                    whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(255, 255, 255, 0.2)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-bold hover:bg-white hover:text-slate-navy transition shadow-lg text-lg"
+                  >
                     ⬆️ Share Resources
-                  </button>
+                  </motion.button>
                 </Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
@@ -174,50 +185,68 @@ export default function Home() {
             </div>
             <p className="text-slate-gray mb-12">Popular resources that are helping students prepare for exams</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mostDownloaded.map((resource, index) => (
-                <div
-                  key={resource.id}
-                  className="card hover:shadow-lg hover:border-crimson transition group flex flex-col"
-                >
-                  {/* Rank Badge */}
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-crimson text-white font-bold text-small">
-                      #{index + 1}
+            {mostDownloaded.length === 0 ? (
+              // Empty state when no resources uploaded
+              <div className="text-center py-12 bg-white rounded-lg border border-light-gray">
+                <TrendingUp className="text-slate-gray mx-auto mb-4 opacity-30" size={64} />
+                <p className="text-slate-gray text-lg mb-6">Be the first to contribute resources!</p>
+                <p className="text-slate-gray mb-6 max-w-2xl mx-auto">
+                  Start building our community library by uploading question papers, textbooks, and study materials. Your contributions help thousands of students succeed.
+                </p>
+                <Link href="/upload">
+                  <button className="bg-crimson text-white px-8 py-3 rounded-lg font-medium hover:bg-red-700 transition">
+                    Upload Resources Now
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {mostDownloaded.map((resource, index) => (
+                    <div
+                      key={resource.id}
+                      className="card hover:shadow-lg hover:border-crimson transition group flex flex-col"
+                    >
+                      {/* Rank Badge */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-crimson text-white font-bold text-small">
+                          #{index + 1}
+                        </div>
+                        <span className="text-small font-medium text-slate-gray px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full">
+                          {resource.category}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-h3 text-slate-navy mb-2 group-hover:text-crimson transition line-clamp-2 flex-grow">
+                        {resource.title}
+                      </h3>
+
+                      {/* Subject */}
+                      <p className="text-slate-gray text-small mb-3">{resource.subject}</p>
+
+                      {/* Downloads & Author */}
+                      <div className="flex items-center justify-between pt-4 border-t border-light-gray">
+                        <div className="flex items-center gap-2 text-small text-slate-gray">
+                          <Download size={16} className="text-emerald-600" />
+                          <span className="font-semibold text-emerald-600">{resource.downloads}</span>
+                        </div>
+                        <span className="text-small text-slate-gray">by {resource.uploadedBy}</span>
+                      </div>
                     </div>
-                    <span className="text-small font-medium text-slate-gray px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full">
-                      {resource.category}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-h3 text-slate-navy mb-2 group-hover:text-crimson transition line-clamp-2 flex-grow">
-                    {resource.title}
-                  </h3>
-
-                  {/* Subject */}
-                  <p className="text-slate-gray text-small mb-3">{resource.subject}</p>
-
-                  {/* Downloads & Author */}
-                  <div className="flex items-center justify-between pt-4 border-t border-light-gray">
-                    <div className="flex items-center gap-2 text-small text-slate-gray">
-                      <Download size={16} className="text-emerald-600" />
-                      <span className="font-semibold text-emerald-600">{resource.downloads}</span>
-                    </div>
-                    <span className="text-small text-slate-gray">by {resource.uploadedBy}</span>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* View All Button */}
-            <div className="text-center mt-8">
-              <Link href="/leaderboard">
-                <button className="border-2 border-crimson text-crimson px-8 py-3 rounded-lg font-medium hover:bg-crimson hover:text-white transition">
-                  See More Top Resources →
-                </button>
-              </Link>
-            </div>
+                {/* View All Button */}
+                <div className="text-center mt-8">
+                  <Link href="/leaderboard">
+                    <button className="border-2 border-crimson text-crimson px-8 py-3 rounded-lg font-medium hover:bg-crimson hover:text-white transition">
+                      See More Top Resources →
+                    </button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </section>
 
@@ -232,82 +261,114 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {SUBJECTS.map((subject) => {
+              {SUBJECTS.map((subject, index) => {
                 // Map string icon names to actual components with specific animations
                 const getIconWithAnimation = (iconName: string) => {
                   const baseClasses = "mx-auto transition-all duration-300";
-                  
+
                   const iconMap: { [key: string]: { component: React.ReactNode; animation: string } } = {
-                    'Atom': { 
-                      component: <Atom size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:animate-spin'
+                    'Atom': {
+                      component: <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Atom size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'TestTube2': { 
+                    'TestTube2': {
                       component: <TestTube2 size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-125'
                     },
-                    'Divide': { 
-                      component: <Divide size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:rotate-180'
+                    'Divide': {
+                      component: <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Divide size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'Dna': { 
+                    'Dna': {
                       component: <Dna size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-110'
                     },
-                    'BarChart3': { 
+                    'BarChart3': {
                       component: <BarChart3 size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:animate-pulse'
                     },
-                    'Leaf': { 
+                    'Leaf': {
                       component: <Leaf size={48} className={`text-emerald-600 ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-110'
                     },
-                    'Globe': { 
-                      component: <Globe size={48} className={`text-blue-600 ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:animate-spin'
+                    'Globe': {
+                      component: <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Globe size={48} className={`text-blue-600 ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'Sun': { 
-                      component: <Sun size={48} className={`text-amber-500 ${baseClasses}`} strokeWidth={1.5} />,
-                      animation: 'group-hover:animate-pulse'
+                    'Sun': {
+                      component: <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Sun size={48} className={`text-amber-500 ${baseClasses}`} strokeWidth={1.5} />
+                      </motion.div>,
+                      animation: ''
                     },
-                    'BookOpen': { 
+                    'BookOpen': {
                       component: <BookOpen size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                       animation: 'group-hover:scale-110'
                     },
                   };
 
-                  const iconData = iconMap[iconName] || { 
+                  const iconData = iconMap[iconName] || {
                     component: <BookOpen size={48} className={`text-crimson ${baseClasses}`} strokeWidth={1.5} />,
                     animation: 'group-hover:scale-110'
                   };
-                  
+
                   return iconData;
                 };
 
                 const { component: icon, animation } = getIconWithAnimation(subject.icon);
 
                 return (
-                  <Link
+                  <motion.div
                     key={subject.name}
-                    href={`/subject/${subject.name.replace(/\s+/g, '-').toLowerCase()}?type=question_paper`}
+                    initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 100
+                    }}
                   >
-                    <div className="card hover:shadow-xl hover:border-crimson hover:scale-105 transition-all duration-300 cursor-pointer group text-center p-6 bg-white border border-slate-200">
-                      {/* Animated Icon Container */}
-                      <div className={`mb-4 flex items-center justify-center h-20 ${animation}`}>
-                        {icon}
+                    <Link href={`/subject/${subject.name.replace(/\s+/g, '-').toLowerCase()}?type=question_paper`}>
+                      <div className="card hover:shadow-xl hover:border-crimson hover:scale-105 transition-all duration-300 cursor-pointer group text-center p-6 bg-white border border-slate-200">
+                        {/* Animated Icon Container */}
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          className={`mb-4 flex items-center justify-center h-20 ${animation}`}
+                        >
+                          {icon}
+                        </motion.div>
+
+                        {/* Subject Name */}
+                        <h3 className="font-bold text-slate-navy mb-2 group-hover:text-crimson transition">
+                          {subject.name}
+                        </h3>
+
+                        {/* Hover CTA */}
+                        <p className="text-small text-slate-gray group-hover:text-crimson transition font-medium">
+                          Explore →
+                        </p>
                       </div>
-
-                      {/* Subject Name */}
-                      <h3 className="font-bold text-slate-navy mb-2 group-hover:text-crimson transition">
-                        {subject.name}
-                      </h3>
-
-                      {/* Hover CTA */}
-                      <p className="text-small text-slate-gray group-hover:text-crimson transition font-medium">
-                        Explore →
-                      </p>
-                    </div>
-                  </Link>
+                    </Link>
+                  </motion.div>
                 );
               })}
             </div>
@@ -374,6 +435,12 @@ export default function Home() {
 
         {/* Floating Social Hub */}
         <SocialHub variant="floating" showCounter={true} />
+
+        {/* Floating History & Pulse Widget */}
+        <FloatingHistoryPulseWidget />
+
+        {/* Tool Dock */}
+        <ToolDock />
       </main>
     </>
   );

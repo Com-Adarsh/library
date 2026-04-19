@@ -23,27 +23,8 @@ export default function SemesterPage() {
 
   const resourceType = router.query.type === 'question_paper' ? 'Question Papers' : 'Textbooks';
 
-  // Mock data - replace with actual API call
-  const resources = [
-    {
-      id: 1,
-      title: 'Mid-semester Exam 2024',
-      type: 'PDF',
-      size: 2.5,
-      uploadedBy: 'John Doe',
-      uploadedAt: '2024-03-15',
-      downloads: 234,
-    },
-    {
-      id: 2,
-      title: 'End-semester Exam 2024',
-      type: 'PDF',
-      size: 3.2,
-      uploadedBy: 'Jane Smith',
-      uploadedAt: '2024-04-10',
-      downloads: 512,
-    },
-  ];
+  // Real data from database - empty until resources are uploaded
+  const resources: any[] = [];
 
   return (
     <>

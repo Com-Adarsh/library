@@ -3,6 +3,7 @@ import { Zap, Filter, Calendar, ExternalLink, Globe, MapPin } from 'lucide-react
 import Navigation from '../components/Navigation';
 import SocialHub from '../components/SocialHub';
 import Footer from '../components/Footer';
+import TodayInResistance from '../components/TodayInResistance';
 
 interface NewsArticle {
   id: string;
@@ -308,6 +309,11 @@ export default function PeoplesPulse() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* This Day in Resistance - Historical Context */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <TodayInResistance />
       </div>
 
       {/* Main Content */}
